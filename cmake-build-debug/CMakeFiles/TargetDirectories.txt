@@ -1,0 +1,3 @@
+/home/dollarkiller/Github/c/ClangStudy/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dollarkiller/Github/c/ClangStudy/cmake-build-debug/CMakeFiles/CMAKE_C_STANDARD.dir
+/home/dollarkiller/Github/c/ClangStudy/cmake-build-debug/CMakeFiles/edit_cache.dir
