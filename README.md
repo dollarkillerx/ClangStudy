@@ -74,3 +74,11 @@ for (int a=0;a<10;a++) {}
     printf("哈哈哈");
     return 0;
 ```
+
+### 分别编译
+```
+现在有两个文件 a.c  b.c
+a.c 依赖 b.c中的函数
+
+gcc -std=c99 -c b.c -o b.o   // 先编译b.c
+```
