@@ -82,3 +82,27 @@ a.c 依赖 b.c中的函数
 
 gcc -std=c99 -c b.c -o b.o   // 先编译b.c
 ```
+
+### Makefile
+```
+#this is make file
+hello.out:sum.o main.c
+	gcc sum.o main.c -o hello.out
+sum.o:sum.c
+	gcc -c sum.c -o sum.o
+
+# 最终的在最上层  依赖依次往下
+```
+
+### 关于返回
+```
+#include 
+int main(int argc,char* argc[])
+{
+    printf("Hello C\n");
+    return 101;
+}
+
+>>> echo $?   // if $? == 0 这个程序就没有问题
+```
+
