@@ -105,4 +105,65 @@ int main(int argc,char* argc[])
 
 >>> echo $?   // if $? == 0 这个程序就没有问题
 ```
+### 指针
+```
+void change(int *a,int *b)
+{
+	int tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
 
+int main()
+{
+	int a = 5;
+	int b = 3;
+	change(&a,&b);
+	printf("num a=%d\nnum b=%d\n",a,b);
+	return 0;
+}
+```
+
+### gdb工具
+`gcc -g main.c -o main.out` -g生成支持调试的
+
+```
+Temporary breakpoint 1, main () at c4.c:11
+11      {
+(gdb) p a
+$1 = -8672
+(gdb) n
+12              int a = 5;
+(gdb) p a
+$2 = -8672
+(gdb) p b
+$3 = 32767
+(gdb) n
+13              int b = 3;
+(gdb) n
+14              change(&a,&b);
+(gdb) l
+9
+10      int main()
+11      {
+12              int a = 5;
+13              int b = 3;
+14              change(&a,&b);
+15              printf("num a=%d\nnum b=%d\n",a,b);
+16              return 0;
+17      }
+18
+(gdb) 
+```
+- start // 开始代码
+- p s // 查看s的指针
+- n   // next
+- s   // 进入
+- l   // 显示当前代码
+- bt  // 打印堆栈
+- f 1 // 切换函数栈层级
+- q   // 推出调试
+- 回车 // 执行上一步的命令
+
+### 指针与内存
+![](./README/mem.png)
