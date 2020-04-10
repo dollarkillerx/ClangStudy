@@ -86,9 +86,9 @@ gcc -std=c99 -c b.c -o b.o   // 先编译b.c
 ### Makefile
 ```
 #this is make file
-hello.out:sum.o main.c
-	gcc sum.o main.c -o hello.out
-sum.o:sum.c
+hello.out:sum.o main.c  # sum.o main.c为 hello.out的依赖
+	gcc sum.o main.c -o hello.out  # 具体命令
+sum.o:sum.c    # 上面如果有依赖 就会向下面寻找 先编译依赖
 	gcc -c sum.c -o sum.o
 
 # 最终的在最上层  依赖依次往下
@@ -104,8 +104,11 @@ int main(int argc,char* argc[])
 }
 
 >>> echo $?   // if $? == 0 这个程序就没有问题
+
+// int argc 为用户输入参数个数
+// argc[] 为用于输入参数
 ```
-### 数组pro
+### 数组pro [array_pro]
 ```
 // 这里传入之后 尽然可以直接修改值
 void convert(int a[],int b[])
@@ -171,7 +174,25 @@ void sort(int a[]) {
     strcat(a1,b1);
     printf("%s \n",a1);
 ```
+### 标准IO
+- stdio
+- stdout
+- stderr
+```
+fprintf(stdout,"Please input the value a:");
+    int a;
+    fscanf(stdin,"%d",&a);
+    if (a < 0) {
+        fprintf(stderr,"the value must > 0\n");
+        return -1;
+    }
 
+// 通道
+./a.out < a.file 1>a.log 2>b.log 
+< 标准输入流
+1为标准输出流
+2标准错误流
+```
 ### 指针
 ```
 void change(int *a,int *b)
@@ -234,3 +255,109 @@ $3 = 32767
 
 ### 指针与内存
 ![](./README/mem.png)
+```
+静态变量
+常量
+全局变量 都在数据段
+```
+
+### 结构体开篇 [day7]
+- 编译步骤
+```
+.c -> .i // 预处理阶段  (1.展开头文件 2.宏替换)
+.i -> .s // 编译阶段
+.s -> .o // 汇编阶段
+.o -> 可执行文件  // 链接阶段
+gcc -o helloworld.i helloworld.c -E // 只执行预处理
+```
+- 宏 s1.c
+```
+#define R 10 // 定义宏  编译器认为宏就是字符串
+#define N(n) n * 10
+int main(void) 
+{
+    int a = R;  // 预处理阶段 会吧10替换到这里
+    int c[R];    
+    int b = N(a); // int b = a * 10; .i文件替换为
+```
+- typedef s2.c
+```
+typedef int tni;
+```
+- 结构体 struct s3.c
+```
+typedef struct weapon {
+    char name[20];
+    int atk;
+    int price;
+} wp;
+
+wp a;
+a.atk = 12;
+a.price = 355;
+strcpy(a.name,"泥巴吧");
+printf("A atk: %d A price: %d A name: %s \n",a.atk,a.price,a.name);
+
+printf("============ \n");
+wp b = {"你大爷",12,22};
+printf("B atk: %d  price: %d  name: %s \n",b.atk,b.price,b.name);
+
+
+// 结构体指针
+void stP(struct weapon *a) {
+    (*a).atk = 12;
+    (*a).price = 111;
+    strcpy((*a).name,"泥巴吧");
+}
+
+void stP2(struct weapon *a) {
+    a->atk = 8;
+    a->price = 888;
+    strcpy(a->name,"泥巴吧11");
+}
+
+void test2(void) {
+    wp b = {"你大爷",12,22};
+    stP(&b);
+    printf("B atk: %d  price: %d  name: %s \n",b.atk,b.price,b.name);
+    stP2(&b);
+    printf("B atk: %d  price: %d  name: %s \n",b.atk,b.price,b.name);
+}
+
+// 结构体数组
+void test3(void) {
+    wp aa[2] = {
+        {"你大爷",12,22},
+        {"你爸爸",88,82},
+    };
+    static wp *b;
+    b = aa;
+    printf("B atk: %d  price: %d  name: %s \n",b->atk,b->price,b->name);
+    b++;
+    printf("B atk: %d  price: %d  name: %s \n",b->atk,b->price,b->name);
+}
+```
+
+### 共用体 s4.c (联合体 让几个不同类型的变量共享一个内存地址  but 在统一时刻只能存储一个成员)
+```
+共用体占的内存长度为 共用体成员中最大的类型长度
+结构体占的内存长度为 不是总大小 要涉及内存对齐
+
+union data {
+    int a;
+    char b;
+    int c;
+};
+
+int main(void) {
+    union data d1;
+    d1.a = 11;
+    printf("d1 a: %d \n",d1.a); // 11
+    d1.c = 12;
+    printf("d1 c: %d \n",d1.c); // 12
+
+    printf("d1 a: %d \n",d1.a); // 12
+
+    return 0;
+}
+```
