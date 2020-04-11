@@ -361,3 +361,74 @@ int main(void) {
     return 0;
 }
 ```
+
+### 内存管理 [day8]
+- mallo
+    - 申请动态内存空间
+- free
+    - 释放动态内存空间
+- calloc 
+    - 申请并初始化一系列内存空间
+- realloc
+    - 重新分配内存空间
+    - ` *realloc(void *ptr,size_t size); // ptr1的内存空间不够用了 申请一个更大的内存空间然后吧ptr1的数据拷贝过去`
+```
+#include <stdlib.h>
+int main(void) {
+    int *ptr;
+
+    ptr = (int *)malloc(sizeof(int)); // 这个存放在堆上
+    if (ptr == NULL) {
+        printf("分配内存失败");
+        exit(1);
+    }
+    printf("请输入一个整数: ");
+    scanf("%d",ptr);
+    printf("你输入的整数是: %d \n",*ptr);
+
+    free(ptr); // 释放
+    return 0;
+}
+```
+#### 初始化内存空间  
+以mem开头的函数都编入字符串标准库中，函数申明包含string.h头文件
+- memset 使用一改常量字节填充内存空间
+- memcpy 拷贝内存空间
+- memmove 拷贝内存空间
+- memcmp 比较内存空间
+- memchr 在内存空间中搜索一个字符 
+
+#### calloc vs malloc
+```
+// calloc 分配空间并初始化
+int *ptr = (int *)calloc(8,sizeof(int));
+
+// malloc 分配空间 并用memset 初始化
+int *ptr = (int *)malloc(8 * sizeof(int));
+memset(prt,0,8*sizeof(int));
+
+ 两者如此写法 等价
+```
+
+### c语言内存布局 
+- 堆 生命周期结束自动回收的量
+- 栈 程序员动态申请的量  需要主动回收
+
+### 位域 [day10]
+主要应用在单片机领域  可以吧大的数据结构 通过(:)进行拆分
+```
+int main(void) 
+{
+    struct Test 
+    {
+        unsigned int a:1;  // 只能放下0~1
+        unsigned int b:1;
+        unsigned int c:2;  // 只能存两个字节
+    };
+
+    struct Test test = {0,1,3};
+    printf("a= %d b= %d c= %d \n",test.a,test.b,test.c);
+    return 0;
+}
+```
+### IO文件操作 [day11]
